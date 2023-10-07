@@ -1,7 +1,7 @@
 # vela-bash-plugin
 
 # build the image
-docker build -t target/vela-sample-plugin:bash .
+docker build -t adicop49/vela-sample:bash .
 
 # publish the image
-docker push target/vela-sample-plugin:bash
+docker push adicop49/vela-sample:bash
