@@ -14,3 +14,16 @@ docker run --rm \
   -e PARAMETER_URL="https://wynk.in/manifest.json" \
   target/vela-sample:bash
 ```
+### Usage
+#### After publishing the image to a Docker registry, it can be referenced in a pipeline:
+```bash
+version: "1"
+
+steps:
+  - name: sample bash plugin
+    image: adicop49/vela-sample:bash
+    pull: always
+    parameters:
+      url: https://wynk.in/manifest.json
+      method: GET
+```
