@@ -1,6 +1,6 @@
 FROM alpine
 
-RUN apk add --update --no-cache bash ca-certificates curl
+RUN apk add --update --no-cache bash ca-certificates curl ncurses
 
 COPY vela-s3-upload-plugin.sh /bin/vela-s3-upload-plugin.sh
 
