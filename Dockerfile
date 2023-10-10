@@ -1,7 +1,7 @@
 # Use an official AWS CLI image as the base image
-FROM amazon/aws-cli:latest
+FROM alpine
 
-RUN apt-get update && apt-get install -y bash ca-certificates curl ncurses-bin git
+RUN apk add --update --no-cache bash ca-certificates curl ncurses git aws-cli
 
 COPY vela-s3-upload-plugin.sh /bin/vela-s3-upload-plugin.sh
 
