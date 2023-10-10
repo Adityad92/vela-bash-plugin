@@ -50,5 +50,5 @@ for file in $CHANGED_FILES; do
   echo "Uploaded $file to S3 bucket"
 done
 
-text_color() green
+text_color green
 echo "Upload complete!"
