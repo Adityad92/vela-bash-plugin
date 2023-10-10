@@ -39,7 +39,7 @@ SOURCE_DIR="s3_upload_files"
 
 # Initialize Git inside the source directory
 cd $SOURCE_DIR
-# git init
+git init
 
 # Get the list of changed files
 CHANGED_FILES=$(git diff --name-only HEAD^ HEAD)
