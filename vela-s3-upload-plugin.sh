@@ -28,27 +28,56 @@ function text_color() {
   fi
 }
 
-# Set your AWS credentials and region
-AWS_ACCESS_KEY_ID=${PARAMETER_AWS_ACCESS_KEY_ID}
-AWS_SECRET_ACCESS_KEY=${PARAMETER_AWS_SECRET_ACCESS_KEY}
-AWS_DEFAULT_REGION=${PARAMETER_AWS_REGION}
+## function to print message
+function printmsg() {
+  msg=$1
+  echo "${msg}"
+}
+
+export AWS_ACCESS_KEY_ID="PARAMETER_AWS_ACCESS_KEY_ID"
+export AWS_SECRET_ACCESS_KEY="PARAMETER_AWS_SECRET_ACCESS_KEY"
+export AWS_DEFAULT_REGION="PARAMETER_AWS_DEFAULT_REGION"
 
 # Set your S3 bucket name and source directory
-S3_BUCKET=${PARAMETER_S3_BUCKET}
-SOURCE_DIR="s3_upload_files"
+export S3_BUCKET="PARAMETER_S3_BUCKET"
 
-# Initialize Git inside the source directory
-# cd $SOURCE_DIR
-# git init
+# Source folder in repo's
+SOURCE_DIR="my_folder"
 
-# Get the list of changed files
-CHANGED_FILES=$(git diff --name-only HEAD^ HEAD)
+# Iterate over files in the source directory
+# for file in $SOURCE_DIR/*; do
+#   if [ -f "$file" ]; then
+#     aws s3 cp "$file" "s3://$S3_BUCKET/$file"
+#     if [ $? -eq 0 ]; then
+#       text_color "yellow" "Uploaded $file to S3 bucket"
+#     else
+#       text_color "red" "Upload Failed!"
+#       exit 1
+#     fi
+#   fi
+# done
 
-# Upload changed files to S3
+# Check if the source directory is empty
+if [ -z "$(ls -A $SOURCE_DIR)" ]; then
+  text_color "yellow" "The source directory is empty. No files to upload."
+  exit 0
+fi
+
+# Check for changes in the source directory using Git
+CHANGED_FILES=$(git diff --name-only HEAD^ HEAD -- "$SOURCE_DIR")
+
+# Iterate over changed files and upload them
 for file in $CHANGED_FILES; do
-  aws s3 cp $file s3://$S3_BUCKET/$file
-  echo "Uploaded $file to S3 bucket"
+  aws s3 cp "$file" "s3://$S3_BUCKET/$file"
+  if [ $? -eq 0 ]; then
+    text_color "yellow" "Uploaded $file to S3 bucket"
+  else
+    text_color "red" "Upload Failed for $file"
+    exit 1
+  fi
 done
 
-text_color green
-echo "Upload complete!"
+text_color 'green'
+printmsg "[INFO] => Files Uploaded Successful!"
+text_color
+printmsg "==========================================="
